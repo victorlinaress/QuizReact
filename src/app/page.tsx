@@ -18,6 +18,12 @@ const Page = () => {
     }
   };
 
+  const handleRestartButton = () => {
+    setAnswers([]); //limpa pergunta
+    setCurrentQuestion(0);//pega a primeira pergunta
+    setShowResult(false)//sem resultados
+  }
+
   const handleAnswered = (answer: number) => {
     setAnswers([...answers, answer]); // pegar a resposta e salvar
     loadNextQuestion();
@@ -51,7 +57,7 @@ const Page = () => {
               questions.length === 1 ? "" : "s"
             }`}
           {showResult && (
-            <button className="px-3 py-2 rounded-md bg-blue-400">Reiniciar Quiz</button>
+            <button onClick={handleRestartButton} className="px-3 py-2 rounded-md bg-blue-400">Reiniciar Quiz</button>
           )}
         </div>
       </div>

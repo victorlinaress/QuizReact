@@ -13,7 +13,11 @@ export const QuestionItem = ({ question, count, onAnswer }: Props) => {
   const checkQuestion = (key: number) => {
     if (selectedAnswer === null) {
       setSelectedAnswer(key);
-      onAnswer(key);
+
+      setTimeout(() => {
+        onAnswer(key);
+        setSelectedAnswer(null);
+      }, 1000);
     }
   };
 
@@ -26,23 +30,39 @@ export const QuestionItem = ({ question, count, onAnswer }: Props) => {
         {question.options.map((option, index) => (
           <li
             key={index}
+            onClick={() => checkQuestion(index)}
             className={`
-              p-2 cursor-pointer hover:bg-gray-200 border rounded-md bg-blue-100 hover:opacity-60
-              ${selectedAnswer !== null ? 'cursor-auto' : 'cursor-pointer hover:opacity-60'}
-              ${selectedAnswer !== null ? 
-                (selectedAnswer === question.answer && selectedAnswer === index ? 
-                  'bg-green-100 border-blue-300' : 
-                  'bg-green-100 border-green-300') : 
-                ''}
-              ${selectedAnswer !== null ? 
-                (selectedAnswer === question.answer && selectedAnswer !== index ? 
-                  'bg-green-100 border-blue-300' : 
-                  'bg-red-100 border-red-300') : 
-                ''}
+              p-2 border rounded-md 
+              ${
+                selectedAnswer === null
+                  ? "cursor-pointer hover:bg-gray-200 bg-blue-100 hover:opacity-60"
+                  : "cursor-auto"
+              }
+              
+              ${
+                selectedAnswer !== null && index === question.answer
+                  ? "bg-green-100 border-green-300" // Resposta correta (verde)
+                  : ""
+              }
+
+              ${
+                selectedAnswer !== null &&
+                index === selectedAnswer &&
+                selectedAnswer !== question.answer
+                  ? "bg-red-100 border-red-300" // Resposta errada (vermelho)
+                  : ""
+              }
+
+              ${
+                selectedAnswer !== null &&
+                index !== selectedAnswer &&
+                index !== question.answer
+                  ? "bg-gray-100 border-gray-300" // Outras opções (cinza claro)
+                  : ""
+              }
             `}
-            onClick={() => checkQuestion(index)} // Chama a função checkQuestion quando o usuário clicar
           >
-            {option} {/* Renderiza cada opção individualmente */}
+            {option}
           </li>
         ))}
       </ul>

@@ -1,14 +1,26 @@
-"use client"; 
-
+"use client";
 import { useState } from "react";
 import { questions } from "@/data/questions";
+import { QuestionItem } from "@/components/QuestionItem";
+import { Results } from "@/components/Results";
 
 const Page = () => {
+  const [answers, setAnswers] = useState<number[]>([]);
   const title = "Quiz de Culinária";
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [showResult, setShowResult] = useState(false);
+
+  const loadNextQuestion = () => {
+    if (questions[currentQuestion + 1]) {
+      setCurrentQuestion(currentQuestion + 1);
+    } else {
+      setShowResult(true);
+    }
+  };
 
   const handleAnswered = (answer: number) => {
-    // Aqui você pode adicionar lógica para lidar com a resposta
+    setAnswers([...answers, answer]); // pegar a resposta e salvar
+    loadNextQuestion();
   };
 
   return (
@@ -21,29 +33,26 @@ const Page = () => {
 
         {/* Corpo do Quiz */}
         <div className="p-5">
-          {/* Renderizando a pergunta e alternativas */}
-          <div className="mb-5">
-            <div className="text-lg font-semibold">
-              {currentQuestion + 1}. {questions[currentQuestion].question}
-            </div>
-            <ul className="mt-3">
-              {questions[currentQuestion].options.map((option, index) => (
-                <li
-                  key={index}
-                  className="p-2 cursor-pointer hover:bg-gray-200"
-                  onClick={() => handleAnswered(index)} // Passando o índice da opção
-                >
-                  {option}
-                </li>
-              ))}
-            </ul>
-          </div>
+          {!showResult && (
+            <QuestionItem
+              question={questions[currentQuestion]}
+              count={currentQuestion + 1}
+              onAnswer={handleAnswered}
+            />
+          )}
         </div>
+
+        {showResult && <Results questions={questions} answers={answers} />}
 
         {/* Rodapé do Quiz */}
         <div className="p-5 text-center border-t border-gray-300">
-          {currentQuestion + 1} de {questions.length} pergunta
-          {questions.length === 1 ? "" : "s"}
+          {!showResult &&
+            `${currentQuestion + 1} de ${questions.length} pergunta${
+              questions.length === 1 ? "" : "s"
+            }`}
+          {showResult && (
+            <button className="px-3 py-2 rounded-md bg-blue-400">Reiniciar Quiz</button>
+          )}
         </div>
       </div>
     </div>

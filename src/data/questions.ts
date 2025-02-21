@@ -8,13 +8,12 @@ export type Question = {
     {
       question: 'Qual país foi derrotado na Segunda Guerra Mundial?',
       options: ['Brasil', 'Canadá', 'Alemanha', 'Austrália'],
-      answer: 3
+      answer: 2
     },
     {
       question: 'Qual é a capital da França?',
       options: ['Londres', 'Paris', 'Berlim', 'Roma'],
-      answer: 2
+      answer: 1
     }
-    // outras perguntas...
   ];
   
